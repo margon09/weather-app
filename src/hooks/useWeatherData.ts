@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import { geoApiClient, weatherApiClient } from "../services/api-client"
+import { geoApiClient, weatherApiClient } from "../services/apiClient"
 
 interface WeatherData {
   weather: {description: string,icon: string}[]
@@ -22,6 +22,7 @@ const useWeatherData = (city?: string) => {
     const controller = new AbortController()
 
     const fetchWeatherData = (q: string) => {
+      setError(null)
       setIsLoading(true)
       geoApiClient
         .get("/direct", {
@@ -41,21 +42,46 @@ const useWeatherData = (city?: string) => {
           })
           .catch(err => {
             if (err.name !== 'AbortError') {
-              setError({ message: err.message })
+              let userMessage = ''
+              if (err.response && err.response.status === 404) {
+                userMessage = 'City not found. Please try a different search.'
+              } else {
+                userMessage = 'An unexpected error occurred. Please try again later.'
+              }
+              setError({ message: userMessage })
               setIsLoading(false)
             }
           })
         } else {
+          setError({ message: 'City not found. Please try a different search.' })
           setWeatherData(null)
           setIsLoading(false)
         } 
       })
       .catch(err => {
         if (err.name !== 'AbortError') {
-          setError({ message: err.message })
+          if (!err.response) {
+            setError({ message: 'Network error. Please check your internet connection and try again.' })
+          } else {
+            const status = err.response.status;
+            let errorMessage = 'An error occurred. Please try again later.'
+            
+            if (status === 400) {
+              errorMessage = 'Bad request. Please check your input.'
+            } else if (status === 401) {
+              errorMessage = 'You are not authorized. Please login and try again.'
+            } else if (status === 404) {
+              errorMessage = 'The requested resource was not found.'
+            } else if (status === 500) {
+              errorMessage = 'Server error. Please try again later.'
+            }
+            
+            setError({ message: errorMessage })
+          }
           setIsLoading(false)
         }
       })
+
     }
 
     if(city){

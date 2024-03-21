@@ -6,12 +6,11 @@ import {
   StyledLabel, 
   StyledInput,
   ButtonsContainer,
-  SearchButton,
-  DeleteButton,
   ErrorText
 } from './LocationSearchForm.styles'
 import { HiMagnifyingGlass } from "react-icons/hi2"
 import { RxCross1 } from "react-icons/rx"
+import Button from '../ui/Button'
 
 export interface CityFormData {
   city: string
@@ -30,7 +29,6 @@ const schema = z.object({
 const SearchForCityForm = ({ onSubmit }: Props) => {
   const locationRef = useRef<HTMLInputElement>(null)
 
-  const [, setLocation] = useState('')
   const [errors, setErrors] = useState<{ message?: string }>({})
   const [isFocused, setIsFocused] = useState(false)
 
@@ -44,7 +42,6 @@ const SearchForCityForm = ({ onSubmit }: Props) => {
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
     const inputValue = locationRef.current?.value || ''
-    setLocation(inputValue)
 
     const validationResult = schema.safeParse({ city: inputValue })
     if (!validationResult.success) {
@@ -77,19 +74,19 @@ const SearchForCityForm = ({ onSubmit }: Props) => {
         />
 
         <ButtonsContainer>
-          <DeleteButton 
+          <Button 
             type='button' 
             onClick={clearInputAndErrors} 
-            $isFocused={isFocused}
+            isFocused={isFocused}
           >
             <RxCross1 />
-          </DeleteButton>
-          <SearchButton 
+          </Button>
+          <Button 
             type='submit' 
-            $isFocused={isFocused}
+            isFocused={isFocused}
           >
             <HiMagnifyingGlass />
-          </SearchButton>
+          </Button>
         </ButtonsContainer>
       </StyledContainer>
       {

@@ -25,19 +25,22 @@ export default createGlobalStyle`
   }
 
   h1{
+    padding: 2rem;
     font-size: 3rem;
     font-weight: 600;
     line-height: 2.5;
     margin-bottom: 1rem;
   }
   h2{
+    padding: 2rem;
     font-size: 1.5rem;
     font-weight: 500;
     line-height: 2;
     margin-bottom: 1rem;
   }
   h3{
-    font-size: 1rem;
+    padding: 2rem;
+    font-size: 1.2rem;
     font-weight: 400;
     line-height: 1.5;
     margin-bottom: 0.5rem;

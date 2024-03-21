@@ -1,10 +1,10 @@
-import { StyledWeatherContainer, StyledCardsContainer } from './WeatherDataDisplay.styles'
+import { StyledWeatherContainer, StyledCardsContainer, SpinnerContainer } from './WeatherDataDisplay.styles'
 import { CityFormData } from "../searchCityForm/LocationSearchForm"
 import WeatherCard from '../weatherCard/WeatherCard'
 import kelvinToCelsius from '../../utils/kelvinToCelcius'
 import useWindowSize from '../../hooks/useWindowSize'
 import useWeatherData from "../../hooks/useWeatherData"
-import { ImSpinner } from "react-icons/im";
+import { ImSpinner } from "react-icons/im"
 
 interface Props {
   data: CityFormData | null 
@@ -28,14 +28,25 @@ const WeatherDataDisplay = ({ data }: Props) => {
   ]
 
   if(isLoading){
-    return <ImSpinner />
+    return <SpinnerContainer data-cy='loading-spinner'>
+      <ImSpinner />
+    </SpinnerContainer>
+  }
+
+  if (error) {
+    return <StyledWeatherContainer>
+      <h3 
+        data-cy='error-message' 
+        className='searchForCityMessage'
+      >
+        {error?.message}
+      </h3>
+    </StyledWeatherContainer>
   }
 
   if (!data || !weatherData) {
     return <StyledWeatherContainer>
       <h2 className='noDataAvailable'>No city data available</h2>
-      <h3 className='searchForCityMessage'>Search for the city</h3>
-      <h3 className='searchForCityMessage'>{error?.message}</h3>
     </StyledWeatherContainer>
   }
 
@@ -43,7 +54,7 @@ const WeatherDataDisplay = ({ data }: Props) => {
     <StyledWeatherContainer>
       {
         isDesktop 
-        ? <h2>Current weather in <span className='cityName'>{data.city}</span></h2> 
+        ? <h2 data-cy='curent_weather_header'>Current weather in <span className='cityName'>{data.city}</span></h2> 
         : <h2>{data.city}</h2>
       }
 
