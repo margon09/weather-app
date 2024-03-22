@@ -54,7 +54,7 @@ const WeatherDataDisplay = ({ data }: Props) => {
     <StyledWeatherContainer>
       {
         isDesktop 
-        ? <h2 data-cy='curent_weather_header'>Current weather in <span className='cityName'>{data.city}</span></h2> 
+        ? <h2 data-cy='current-weather-header'>Current weather in <span className='cityName'>{data.city}</span></h2> 
         : <h2>{data.city}</h2>
       }
 

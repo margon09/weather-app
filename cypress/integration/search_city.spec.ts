@@ -44,27 +44,27 @@ describe('City search', () => {
   })
 
   it('should display validation error message if user types less than 3 characters', () => {
-    cy.get('input[placeholder="e.g. Copenhagen"]').type('Ma')
+    cy.get('[data-cy="form-input"]').type('Ma')
     cy.get('button[type="submit"]').click()
     cy.contains('Location name should contain at least 3 letters').should('be.visible')
   })
 
   it('should show a loading spinner after the form is submitted', () => {
-    cy.get('input[placeholder="e.g. Copenhagen"]').type('Madrid')
+    cy.get('[data-cy="form-input"]').type('Madrid')
     cy.get('button[type="submit"]').click()
     cy.get('[data-cy="loading-spinner"]').should('be.visible')
   })
 
   it('should display an error message for a non-existent city', () => {
-    cy.get('input[placeholder="e.g. Copenhagen"]').type('InvalidCity')
+    cy.get('[data-cy="form-input"]').type('InvalidCity')
     cy.get('button[type="submit"]').click()
     cy.get('[data-cy="error-message"]').should('contain', 'City not found')
   })
 
   it('should get weather data for Paris', () => {
-    cy.get('input[placeholder="e.g. Copenhagen"]').type('Paris')
+    cy.get('[data-cy="form-input"]').type('Paris')
     cy.get('button[type="submit"]').click()
-    cy.get('[data-cy="curent_weather_header"]').should('contain', 'Current weather in Paris')
+    cy.get('[data-cy="current-weather-header"]').should('contain', 'Current weather in Paris')
   })
 
 })

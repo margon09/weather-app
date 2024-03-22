@@ -63,6 +63,7 @@ const SearchForCityForm = ({ onSubmit }: Props) => {
       <StyledContainer>
         <StyledLabel htmlFor="city">Search for the city</StyledLabel>
         <StyledInput 
+          data-cy='form-input'
           ref={locationRef}
           id='city' 
           type="text" 
