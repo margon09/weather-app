@@ -18,9 +18,8 @@ export const theme = {
     placeholder: '#9d9d9d',
     activeInput: '#001965',
     danger: '#bb2124',
-    // cardBackground: '#c0cbcf',
     cardBackground: '#d3dcdf',
-    infoCardBackground: '#949fa3'
+    infoCardBackground: '#001965;'
   },
   breakpoints,
   mediaQueries: {

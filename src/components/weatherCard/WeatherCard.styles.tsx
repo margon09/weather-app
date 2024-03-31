@@ -28,6 +28,13 @@ export const StyledCard = styled.div`
     }
   }
 
+  .weatherIcon{
+    position: absolute;
+    font-size: 2rem;
+    color: ${({ theme }) => theme.colors.activeInput};
+    z-index: 1;
+  }
+
   p{
     width: 100%;
     margin: 0;
@@ -37,7 +44,8 @@ export const StyledCard = styled.div`
     flex: 0.2;
     font-size: 1.2rem;
     color: ${({ theme }) => theme.colors.white};
-    background: ${({ theme }) => theme.colors.infoCardBackground};
+
+    background: ${({ theme }) => theme.colors.activeInput};
     border-radius: ${({ theme }) => theme.borderRadius};
   }
 

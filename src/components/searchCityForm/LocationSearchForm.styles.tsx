@@ -7,6 +7,7 @@ interface StyledInputProps {
 export const StyledForm = styled.form`
   width: 60%;
   height: 20vh;
+  margin: 5% auto;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -17,6 +18,12 @@ export const StyledForm = styled.form`
   ${({ theme }) => theme.mediaQueries.phone} {
     width: 100%;
     margin: 0 5%;
+    position: fixed;
+    top: 0;
+    z-index: 2;
+  }
+  ${({ theme }) => theme.mediaQueries.ultraWide} {
+    margin: 2% auto;
   }
 `
 export const StyledContainer = styled.div`
@@ -44,7 +51,6 @@ export const StyledLabel = styled.label`
 export const StyledInput = styled.input<StyledInputProps>`
   box-sizing: border-box;
   width: calc(100% - 2rem);
-  height: 4vh;
   padding: 0.5rem;
   font-size: 1.2rem;
   border: 1px solid ${({ theme, $hasError }) => $hasError ? theme.colors.danger : theme.colors.borders};
@@ -59,10 +65,15 @@ export const StyledInput = styled.input<StyledInputProps>`
       font-size: 1rem;
     }
   }
-
+  
   &::placeholder{
     color: ${({ theme }) => theme.colors.placeholder};
     width: 85%;
+    
+    ${({ theme }) => theme.mediaQueries.phone} {
+      font-size: 1rem;
+      font-style: italic;
+    }
   }
 
   &:focus::placeholder {
@@ -76,13 +87,14 @@ export const StyledInput = styled.input<StyledInputProps>`
 
   ${({ theme }) => theme.mediaQueries.phone} {
     width: calc(100% - 0rem);
+    font-size: 1rem;
   }
 `
 export const ButtonsContainer = styled.div`
   width: 15%;
   height:  2.2rem !important;
   position: absolute;
-  top: 72%;
+  top: 75%;
   right: 2rem;
   transform: translateY(-50%);
   display: flex;

@@ -45,7 +45,7 @@ describe('City search', () => {
 
   it('should display validation error message if user types less than 3 characters', () => {
     cy.get('[data-cy="form-input"]').type('Ma')
-    cy.get('button[type="submit"]').click()
+    cy.get('button[type="submit"]').click({force:true})
     cy.contains('Location name should contain at least 3 letters').should('be.visible')
   })
 

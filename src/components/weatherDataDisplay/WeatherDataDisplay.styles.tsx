@@ -1,10 +1,12 @@
 import styled from "styled-components"
 
-export const StyledWeatherContainer = styled.div`
+interface StyledWeatherProps {
+  $error?: boolean
+}
+
+export const StyledWeatherContainer = styled.div<StyledWeatherProps>`
   width: 60%;
   height: auto;
-  margin-top: 5rem; 
-  padding: 2% 0;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -21,15 +23,21 @@ export const StyledWeatherContainer = styled.div`
 
   .cityName{
     color: ${({ theme }) => theme.colors.activeInput};
-    text-transform: capitalize;
+    text-transform: uppercase;
   }
-
+  
   ${({ theme }) => theme.mediaQueries.phone} {
     width: 100%;
     margin: 0 5%;
-    height: auto;
+    margin-top: 3vh;
+    margin-top:${({ $error }) => $error ? '20vh' : '3vg'};
+    
+    h2{
+      margin-top: 40%;
+      text-transform: uppercase;
+      color: ${({ theme }) => theme.colors.activeInput};
+    }
   }
-
 `
 export const StyledCardsContainer = styled.div`
   width: 100%;
@@ -60,5 +68,9 @@ export const SpinnerContainer = styled.div`
     to {
       transform: rotate(360deg);
     }
+  }
+
+  ${({ theme }) => theme.mediaQueries.phone} {
+    margin-top: 40%;
   }
 `

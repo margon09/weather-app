@@ -1,4 +1,4 @@
-import { FormEvent, KeyboardEvent, useRef, useState } from 'react'
+import { FormEvent, useRef, useState } from 'react'
 import { z } from 'zod'
 import { 
   StyledForm, 
@@ -9,7 +9,7 @@ import {
   ErrorText
 } from './LocationSearchForm.styles'
 import { HiMagnifyingGlass } from "react-icons/hi2"
-import { RxCross1 } from "react-icons/rx"
+import { FaRegTrashCan } from "react-icons/fa6"
 import Button from '../ui/Button'
 
 export interface CityFormData {
@@ -21,42 +21,47 @@ interface Props {
 }
 
 const schema = z.object({
-  city: z
-    .string()
-    .min(3, { message: 'Location name should contain at least 3 letters' }) 
+  city: z.string().min(3, { message: 'Location name should contain at least 3 letters' })
 })
 
 const SearchForCityForm = ({ onSubmit }: Props) => {
   const locationRef = useRef<HTMLInputElement>(null)
-
-  const [errors, setErrors] = useState<{ message?: string }>({})
+  const [error, setError] = useState<string | null>(null)
   const [isFocused, setIsFocused] = useState(false)
 
   const clearInputAndErrors = () => {
     if (locationRef.current) {
       locationRef.current.value = ''
     }
-    setErrors({})
+    setError(null)
+  }
+
+  const validateInput = (inputValue: string) => {
+    const validationResult = schema.safeParse({ city: inputValue })
+    if (!validationResult.success) {
+      setError(validationResult.error.errors[0].message)
+      return false
+    }
+    setError(null)
+    return true
   }
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
-    const inputValue = locationRef.current?.value || ''
+    const inputValue = locationRef.current?.value.trim() || ''
 
-    const validationResult = schema.safeParse({ city: inputValue })
-    if (!validationResult.success) {
-      setErrors({ message: validationResult.error.errors[0].message })
-      return
-    }
-    onSubmit(validationResult.data)
-    clearInputAndErrors()
-  }
-
-  const handleInputKeyDown = (e: KeyboardEvent) => {
-    if (e.key === 'Enter') {
-      handleSubmit(e)
+    if (validateInput(inputValue)) {
+      onSubmit({ city: inputValue })
+      clearInputAndErrors()
     }
   }
+
+  const handleInputChange = () => {
+    const inputValue = locationRef.current?.value.trim() || ''
+    validateInput(inputValue)
+  }
+
+  const isInputValid = error === null
 
   return (
     <StyledForm onSubmit={handleSubmit}>
@@ -64,36 +69,33 @@ const SearchForCityForm = ({ onSubmit }: Props) => {
         <StyledLabel htmlFor="city">Search for the city</StyledLabel>
         <StyledInput 
           data-cy='form-input'
+          data-testid='form-input'
           ref={locationRef}
           id='city' 
           type="text" 
           placeholder="e.g. Copenhagen" 
-          $hasError={!!errors.message} 
+          $hasError={!isInputValid} 
           onFocus={() => setIsFocused(true)}
           onBlur={() => setIsFocused(false)}
-          onKeyDown={handleInputKeyDown}
+          onKeyDown={(e) => e.key === 'Enter' && handleSubmit(e)}
+          onChange={handleInputChange}
         />
-
         <ButtonsContainer>
           <Button 
             type='button' 
-            onClick={clearInputAndErrors} 
-            isFocused={isFocused}
-          >
-            <RxCross1 />
+            onClick={clearInputAndErrors}>
+            <FaRegTrashCan />
           </Button>
           <Button 
             type='submit' 
             isFocused={isFocused}
-          >
+            disabled={!isInputValid}
+            largeFont={true}>
             <HiMagnifyingGlass />
           </Button>
         </ButtonsContainer>
+        {error && <ErrorText className='danger'>{error}</ErrorText>}
       </StyledContainer>
-      {
-        errors &&
-        <ErrorText className='danger'>{errors.message}</ErrorText>
-      }
     </StyledForm>
   )
 }
