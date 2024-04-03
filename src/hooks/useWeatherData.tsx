@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react"
 import { geoApiClient, weatherApiClient } from "../services/apiClient"
+import { HttpStatusCode } from "axios"
 
 interface WeatherData {
   weather: {description: string,icon: string}[]
@@ -20,6 +21,16 @@ const useWeatherData = (city?: string) => {
   useEffect(() => {
 
     const controller = new AbortController()
+
+    const getErrorMessage = (statusCode: string) => {
+      const messages: { [key: string]: string } = {
+        '400': 'Bad request. Please check your input.',
+        '401': 'You are not authorized. Please login and try again.',
+        '404': 'The requested city was not found. Please try a different search.',
+        '500': 'Server error. Please try again later.'
+      }
+      return messages[statusCode] || 'An unexpected error occurred. Please try again later.'
+    }
 
     const fetchWeatherData = (q: string) => {
       setError(null)
@@ -42,42 +53,19 @@ const useWeatherData = (city?: string) => {
           })
           .catch(err => {
             if (err.name !== 'AbortError') {
-              let userMessage = ''
-              if (err.response && err.response.status === 404) {
-                userMessage = 'City not found. Please try a different search.'
-              } else {
-                userMessage = 'An unexpected error occurred. Please try again later.'
-              }
-              setError({ message: userMessage })
+              setError({ message: getErrorMessage(err.response.status) })
               setIsLoading(false)
             }
           })
         } else {
-          setError({ message: 'City not found. Please try a different search.' })
+          setError({ message: getErrorMessage(HttpStatusCode.NotFound.toString()) })
           setWeatherData(null)
           setIsLoading(false)
         } 
       })
       .catch(err => {
         if (err.name !== 'AbortError') {
-          if (!err.response) {
-            setError({ message: 'Network error. Please check your internet connection and try again.' })
-          } else {
-            const status = err.response.status;
-            let errorMessage = 'An error occurred. Please try again later.'
-            
-            if (status === 400) {
-              errorMessage = 'Bad request. Please check your input.'
-            } else if (status === 401) {
-              errorMessage = 'You are not authorized. Please login and try again.'
-            } else if (status === 404) {
-              errorMessage = 'The requested resource was not found.'
-            } else if (status === 500) {
-              errorMessage = 'Server error. Please try again later.'
-            }
-            
-            setError({ message: errorMessage })
-          }
+          setError({ message: getErrorMessage(err.response?.status) })
           setIsLoading(false)
         }
       })

@@ -57,8 +57,10 @@ const SearchForCityForm = ({ onSubmit }: Props) => {
   }
 
   const handleInputChange = () => {
-    const inputValue = locationRef.current?.value.trim() || ''
-    validateInput(inputValue)
+    validateInput(locationRef.current?.value || '')
+    if (locationRef.current && !/^(?!-)(?!.*-$)[a-zA-Z ]+$/.test(locationRef.current.value.substring(locationRef.current.value.length - 1) || '')) { 
+      locationRef.current.value = locationRef.current.value.slice(0, -1).trim()
+    } 
   }
 
   const isInputValid = error === null

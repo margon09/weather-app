@@ -58,7 +58,7 @@ describe('City search', () => {
   it('should display an error message for a non-existent city', () => {
     cy.get('[data-cy="form-input"]').type('InvalidCity')
     cy.get('button[type="submit"]').click()
-    cy.get('[data-cy="error-message"]').should('contain', 'City not found')
+    cy.get('[data-cy="error-message"]').should('contain', 'The requested city was not found.')
   })
 
   it('should get weather data for Paris', () => {
