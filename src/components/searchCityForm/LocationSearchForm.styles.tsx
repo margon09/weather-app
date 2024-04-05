@@ -22,6 +22,9 @@ export const StyledForm = styled.form`
     top: 0;
     z-index: 2;
   }
+  ${({ theme }) => theme.mediaQueries.miniTablet} {
+    width: 70%;
+  }
   ${({ theme }) => theme.mediaQueries.ultraWide} {
     margin: 2% auto;
   }

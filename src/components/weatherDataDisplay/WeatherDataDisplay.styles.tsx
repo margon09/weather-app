@@ -38,6 +38,9 @@ export const StyledWeatherContainer = styled.div<StyledWeatherProps>`
       color: ${({ theme }) => theme.colors.activeInput};
     }
   }
+  ${({ theme }) => theme.mediaQueries.miniTablet} {
+    width: 70%;
+  }
 `
 export const StyledCardsContainer = styled.div`
   width: 100%;

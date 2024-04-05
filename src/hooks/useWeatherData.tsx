@@ -19,7 +19,6 @@ const useWeatherData = (city?: string) => {
   const [isLoading, setIsLoading] = useState<boolean>(false)
 
   useEffect(() => {
-
     const controller = new AbortController()
 
     const getErrorMessage = (statusCode: string) => {
@@ -53,9 +52,10 @@ const useWeatherData = (city?: string) => {
           })
           .catch(err => {
             if (err.name !== 'AbortError') {
-              setError({ message: getErrorMessage(err.response.status) })
-              setIsLoading(false)
+              return
             }
+            setError({ message: getErrorMessage(err.response?.status || '500') })
+            setIsLoading(false)
           })
         } else {
           setError({ message: getErrorMessage(HttpStatusCode.NotFound.toString()) })
@@ -67,9 +67,9 @@ const useWeatherData = (city?: string) => {
         if (err.name !== 'AbortError') {
           setError({ message: getErrorMessage(err.response?.status) })
           setIsLoading(false)
+          return
         }
       })
-
     }
 
     if(city){
