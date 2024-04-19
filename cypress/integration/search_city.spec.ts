@@ -4,7 +4,7 @@ describe('City search', () => {
 
 
     // Geocoding API response mock (Madrid)
-    cy.intercept('GET', 'http://api.openweathermap.org/geo/1.0/direct', (req) => {
+    cy.intercept('GET', 'https://api.openweathermap.org/geo/1.0/direct', (req) => {
       if (req.query.q === 'InvalidCity') {
         req.reply({
           statusCode: 200,
@@ -19,7 +19,7 @@ describe('City search', () => {
     }).as('getGeocode')
 
     //  Weather API response mock (Madrid)
-    cy.intercept('GET', 'http://api.openweathermap.org/data/2.5/weather', (req) => {
+    cy.intercept('GET', 'https://api.openweathermap.org/data/2.5/weather', (req) => {
       if (req.query.lat === 40.4168 && req.query.lon === -3.7038) {
         req.reply({
           statusCode: 200,
