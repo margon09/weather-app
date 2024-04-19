@@ -10,7 +10,7 @@ const weatherApiClient = axios.create({
 })
 
 const geoApiClient = axios.create({
-  baseURL: "http://api.openweathermap.org/geo/1.0",
+  baseURL: "https://api.openweathermap.org/geo/1.0",
   params: {
     appid: API_KEY,
     limit: 1
